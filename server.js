@@ -70,22 +70,68 @@ const viewEmployee = () => {
 }
 
 const addDept = () => {
-  db.query("SELECT * FROM employee", function(err, result, fields){
-    console.table(result);
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'deptName',
+      message: 'What is the department name?',
+    }
+  ]).then(res => {
+    db.query("INSERT INTO department", function(err, result, fields){
+
     promptUser()
-  })
+  })})
 }
 const addRole = () => {
-  db.query("SELECT * FROM employee", function(err, result, fields){
-    console.table(result);
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'roleTitle',
+      message: 'What is the role title?',
+    },
+    {
+      type: 'input',
+      name: 'roleSalary',
+      message: 'What is the role salary?',
+    },
+    {
+      type: 'input',
+      name: 'roleDept',
+      message: 'What department is the role under?',
+    }
+  ]).then(res => {
+    db.query("INSERT INTO role", function(err, result, fields){
+
     promptUser()
-  })
+  })})
 }
 const addEmployee = () => {
-  db.query("SELECT * FROM employee", function(err, result, fields){
-    console.table(result);
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: 'What is the employee first name?',
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: 'What is the employee last name?',
+    },
+    {
+      type: 'input',
+      name: 'roleId',
+      message: 'What is the employee role id?',
+    },
+    {
+      type: 'input',
+      name: 'managerId',
+      message: 'What is the employee manager id?',
+    }
+  ]).then(res => {
+    db.query("INSERT INTO employee", function(err, result, fields){
+
     promptUser()
-  })
+  })})
 }
 
 const updateEmployeeRole = () => {
