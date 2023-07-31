@@ -5,7 +5,7 @@ USE admin_db;
 
 CREATE TABLE department (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  deptName VARCHAR(50) NOT NULL
+  dept_name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE role (
@@ -26,5 +26,8 @@ CREATE TABLE employee (
   manager_id INT,
   FOREIGN KEY (role_id)
   REFERENCES role(id)
+  ON DELETE SET NULL,
+  CONSTRAINT FOREIGN KEY (manager_id)
+  REFERENCES employee(id)
   ON DELETE SET NULL
 );

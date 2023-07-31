@@ -1,16 +1,14 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+require('dotenv').config();
 
 // Connect to database
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    // MySQL username,
-    user: 'root',
-    // MySQL password
-    password: 'F!uff3rNutt3r',
-    database: 'admin_db'
-  },
+const db = mysql.createConnection({
+  host:process.env.DB_HOST,
+  user:process.env.DB_USER,
+  password:process.env.DB_PASSWORD,
+  database:process.env.DB_NAME
+},
   console.log(`Connected to the administrative database.`)
 );
 
@@ -77,8 +75,8 @@ const addDept = () => {
       message: 'What is the department name?',
     }
   ]).then(res => {
-    db.query("INSERT INTO department", function(err, result, fields){
-
+    db.query("INSERT INTO department SET ?", (res.deptName), function(err, result, fields){
+    console.table(result);
     promptUser()
   })})
 }
@@ -100,8 +98,8 @@ const addRole = () => {
       message: 'What department is the role under?',
     }
   ]).then(res => {
-    db.query("INSERT INTO role", function(err, result, fields){
-
+    db.query("INSERT INTO role VALUES ?", (res.roleTitle, res.roleSalary, res.roleDept), function(err, result, fields){
+    console.table(result);
     promptUser()
   })})
 }
@@ -119,8 +117,8 @@ const addEmployee = () => {
     },
     {
       type: 'input',
-      name: 'roleId',
-      message: 'What is the employee role id?',
+      name: 'roleTitle',
+      message: 'What is the employee role title?',
     },
     {
       type: 'input',
@@ -128,8 +126,8 @@ const addEmployee = () => {
       message: 'What is the employee manager id?',
     }
   ]).then(res => {
-    db.query("INSERT INTO employee", function(err, result, fields){
-
+    db.query("INSERT INTO employee (first_name, last_name, role_title, manager_id) VALUES (res.firstName, res.lastName, res.roleId, res.managerId)", function(err, result, fields){
+    console.table(result);
     promptUser()
   })})
 }
@@ -172,6 +170,16 @@ const updateEmployeeRole = () => {
 //       name:`${first_name} ${last_name}`,
 //       value: id
 //     }));
+
+// BONUS update employee managers
+
+// BONUS view employees by manager
+
+// BONUS view employees by department
+
+// BONUS delete departments, roles, and employees (DELETE FROM   WHERE)
+
+// BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
 
 //start questions
 promptUser()
