@@ -32,6 +32,12 @@ const promptUser = () => {
     case 'View all employees':
       viewEmployee()
       break;
+    case 'View all employees by manager':
+      viewByManager()
+      break;
+    case 'View all employees by role':
+      viewByRole()
+      break;
     case 'Add a department':
       addDept()
       break;
@@ -56,12 +62,6 @@ const promptUser = () => {
     case 'Delete an employee':
       deleteEmployee()
       break;
-    case 'View all employees by manager':
-      viewByManager()
-      break;
-    case 'View all employees by role':
-      viewByRole()
-      break;
   }
 })
 };
@@ -82,7 +82,7 @@ const viewRole = () => {
 }
 //employee data view function
 const viewEmployee = () => {
-  db.query("SELECT * FROM employee", function(err, result, fields){
+  db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.dept_name AS department,  role.salary, employee.manager_id AS manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id", function(err, result, fields){
     console.table(result);
     promptUser()
   })
@@ -209,14 +209,14 @@ const updateEmployeeManager = () => {
 }
 // BONUS view employees by manager
 const viewByManager = () => {
-  db.query("SELECT * FROM employee ORDER BY manager_id", function(err, result, fields){
+  db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.dept_name AS department,  role.salary, employee.manager_id AS manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id ORDER BY manager_id", function(err, result, fields){
     console.table(result);
     promptUser()
   })
 }
 // BONUS view employees by role
 const viewByRole = () => {
-  db.query("SELECT * FROM employee ORDER BY role_id", function(err, result, fields){
+  db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.dept_name AS department,  role.salary, employee.manager_id AS manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id ORDER BY role_id", function(err, result, fields){
     console.table(result);
     promptUser()
   })
@@ -278,7 +278,6 @@ const deleteEmployee = () => {
     promptUser()
   })})
 }
-// BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
 
 
 //start first round of questions
