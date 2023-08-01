@@ -19,7 +19,7 @@ const promptUser = () => {
       type: 'list',
       name: 'action',
       message: 'What would you like to do?',
-      choices:['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee']
+      choices:['View all departments', 'Add a department', 'Delete a department', 'View all roles', 'Add a role', 'View all employees', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee']
     }
   ]).then(res => {
   switch (res.action){
@@ -46,6 +46,9 @@ const promptUser = () => {
       break;
     case 'Update the manager of an employee':
       updateEmployeeManager()
+      break;
+    case 'Delete a department':
+      deleteDept()
       break;
   }
 })
@@ -154,7 +157,7 @@ const updateEmployeeRole = () => {
     {
       type: 'input',
       name: 'roleQuery',
-      message: 'What is the employees new role?'
+      message: 'What is the employees new role id?'
     }
   ]).then(res => {
     const updateRole = res.roleQuery;
@@ -192,14 +195,82 @@ const updateEmployeeManager = () => {
     promptUser();
   })
 }
+// BONUS delete departments, roles, and employees (DELETE FROM   WHERE)
+//BONUS department delete function
+const deleteDept = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'id',
+      message: 'What is the department ID?',
+    }
+  ]).then(res => {
+    const deleteDept = res
+    console.log(deleteDept)
+    db.query("DELETE FROM department WHERE id = ?", deleteDept, function(err, result, fields){
+    console.log(result)
+    promptUser()
+  })})
+}
+//BONUS role delete function
+const deleteRole = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'What is the role title?',
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'What is the role salary?',
+    },
+    {
+      type: 'input',
+      name: 'department_id',
+      message: 'What department is the role under?',
+    }
+  ]).then(res => {
+    const newRole = res
+    db.query("INSERT INTO role SET ?", newRole , function(err, result, fields){
+    promptUser()
+  })})
+}
+// BONUS employee delete function
+const deleteEmployee = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'first_name',
+      message: 'What is the employee first name?',
+    },
+    {
+      type: 'input',
+      name: 'last_name',
+      message: 'What is the employee last name?',
+    },
+    {
+      type: 'input',
+      name: 'role_id',
+      message: 'What is the employee role id?',
+    },
+    {
+      type: 'input',
+      name: 'manager_id',
+      message: 'What is the employee manager id?',
+    }
+  ]).then(res => {
+    const newEmployee = res
+    db.query("INSERT INTO employee SET ?", newEmployee, function(err, result, fields){
+    promptUser()
+  })})
+}
+// BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
 
 // BONUS view employees by manager
 
 // BONUS view employees by department
 
-// BONUS delete departments, roles, and employees (DELETE FROM   WHERE)
-
-// BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
 
 //start first round of questions
 promptUser()
