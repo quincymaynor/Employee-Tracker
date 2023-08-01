@@ -19,7 +19,7 @@ const promptUser = () => {
       type: 'list',
       name: 'action',
       message: 'What would you like to do?',
-      choices:['View all departments', 'Add a department', 'Delete a department', 'View all roles', 'Add a role', 'delete a role', 'View all employees', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee', 'Delete an employee']
+      choices:['View all departments', 'Add a department', 'Delete a department', 'View all roles', 'Add a role', 'delete a role', 'View all employees', 'View all employees by manager', 'View all employees by role', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee', 'Delete an employee']
     }
   ]).then(res => {
   switch (res.action){
@@ -55,6 +55,12 @@ const promptUser = () => {
       break;
     case 'Delete an employee':
       deleteEmployee()
+      break;
+    case 'View all employees by manager':
+      viewByManager()
+      break;
+    case 'View all employees by role':
+      viewByRole()
       break;
   }
 })
@@ -201,7 +207,21 @@ const updateEmployeeManager = () => {
     promptUser();
   })
 }
-//BONUS department delete function
+// BONUS view employees by manager
+const viewByManager = () => {
+  db.query("SELECT * FROM employee ORDER BY manager_id", function(err, result, fields){
+    console.table(result);
+    promptUser()
+  })
+}
+// BONUS view employees by role
+const viewByRole = () => {
+  db.query("SELECT * FROM employee ORDER BY role_id", function(err, result, fields){
+    console.table(result);
+    promptUser()
+  })
+}
+// BONUS department delete function
 const deleteDept = () => {
   db.query("SELECT * FROM department", function(err, result, fields){
     console.table(result);
@@ -220,7 +240,7 @@ const deleteDept = () => {
     promptUser()
   })})
 }
-//BONUS role delete function
+// BONUS role delete function
 const deleteRole = () => {
   db.query("SELECT * FROM role", function(err, result, fields){
     console.table(result);
@@ -259,10 +279,6 @@ const deleteEmployee = () => {
   })})
 }
 // BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
-
-// BONUS view employees by manager
-
-// BONUS view employees by department
 
 
 //start first round of questions
