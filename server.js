@@ -19,7 +19,7 @@ const promptUser = () => {
       type: 'list',
       name: 'action',
       message: 'What would you like to do?',
-      choices:['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
+      choices:['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee']
     }
   ]).then(res => {
   switch (res.action){
@@ -41,8 +41,11 @@ const promptUser = () => {
     case 'Add an employee':
       addEmployee()
       break;
-    case 'Update an employee role':
+    case 'Update the role of an employee':
       updateEmployeeRole()
+      break;
+    case 'Update the manager of an employee':
+      updateEmployeeManager()
       break;
   }
 })
@@ -164,6 +167,31 @@ const updateEmployeeRole = () => {
 }
 
 // BONUS update employee managers
+const updateEmployeeManager = () => {
+  db.query("SELECT * FROM employee", function(err, result, fields){
+    console.table(result);
+  })
+
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'employeeQuery',
+      message: 'What is the ID of the employee you would like to update?',
+    },
+    {
+      type: 'input',
+      name: 'managerQuery',
+      message: 'What is the ID of the employees new manager?'
+    }
+  ]).then(res => {
+    const updateManager = res.managerQuery;
+    const updateEmployee = res.employeeQuery;
+    db.query("UPDATE employee SET manager_id = ? WHERE id = ?;", 
+    [updateManager, updateEmployee]
+    );
+    promptUser();
+  })
+}
 
 // BONUS view employees by manager
 
