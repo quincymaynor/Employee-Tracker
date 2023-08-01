@@ -209,14 +209,14 @@ const updateEmployeeManager = () => {
 }
 // BONUS view employees by manager
 const viewByManager = () => {
-  db.query("SELECT * FROM employee ORDER BY manager_id", function(err, result, fields){
+  db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.dept_name AS department,  role.salary, employee.manager_id AS manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id ORDER BY manager_id", function(err, result, fields){
     console.table(result);
     promptUser()
   })
 }
 // BONUS view employees by role
 const viewByRole = () => {
-  db.query("SELECT * FROM employee ORDER BY role_id", function(err, result, fields){
+  db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.dept_name AS department,  role.salary, employee.manager_id AS manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id ORDER BY role_id", function(err, result, fields){
     console.table(result);
     promptUser()
   })
