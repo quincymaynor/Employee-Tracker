@@ -12,6 +12,7 @@ const db = mysql.createConnection({
   console.log(`Connected to the administrative database.`)
 );
 
+//inquirer prompt and switch case for hanlding the response to the prompt
 const promptUser = () => {
   return inquirer.prompt([
     {
@@ -47,91 +48,95 @@ const promptUser = () => {
 })
 };
 
-//begin functions for switchcase
+//department data view function
 const viewDept = () => {
   db.query("SELECT * FROM department", function(err, result, fields){
     console.table(result);
     promptUser()
   })
 }
+//role data view function
 const viewRole = () => {
   db.query("SELECT * FROM role", function(err, result, fields){
     console.table(result);
     promptUser()
   })
 }
+//employee data view function
 const viewEmployee = () => {
   db.query("SELECT * FROM employee", function(err, result, fields){
     console.table(result);
     promptUser()
   })
 }
-
+//department add function
 const addDept = () => {
   inquirer.prompt([
     {
       type: 'input',
-      name: 'deptName',
+      name: 'dept_name',
       message: 'What is the department name?',
     }
   ]).then(res => {
-    db.query("INSERT INTO department SET ?", (res.deptName), function(err, result, fields){
-    console.table(result);
+    const newDept = res
+    db.query("INSERT INTO department SET ?", newDept, function(err, result, fields){
     promptUser()
   })})
 }
+//role add function
 const addRole = () => {
   inquirer.prompt([
     {
       type: 'input',
-      name: 'roleTitle',
+      name: 'title',
       message: 'What is the role title?',
     },
     {
       type: 'input',
-      name: 'roleSalary',
+      name: 'salary',
       message: 'What is the role salary?',
     },
     {
       type: 'input',
-      name: 'roleDept',
+      name: 'department_id',
       message: 'What department is the role under?',
     }
   ]).then(res => {
-    db.query("INSERT INTO role VALUES ?", (res.roleTitle, res.roleSalary, res.roleDept), function(err, result, fields){
-    console.table(result);
+    const newRole = res
+    db.query("INSERT INTO role SET ?", newRole , function(err, result, fields){
     promptUser()
   })})
 }
+//employee add function
 const addEmployee = () => {
   inquirer.prompt([
     {
       type: 'input',
-      name: 'firstName',
+      name: 'first_name',
       message: 'What is the employee first name?',
     },
     {
       type: 'input',
-      name: 'lastName',
+      name: 'last_name',
       message: 'What is the employee last name?',
     },
     {
       type: 'input',
-      name: 'roleTitle',
-      message: 'What is the employee role title?',
+      name: 'role_id',
+      message: 'What is the employee role id?',
     },
     {
       type: 'input',
-      name: 'managerId',
+      name: 'manager_id',
       message: 'What is the employee manager id?',
     }
   ]).then(res => {
-    db.query("INSERT INTO employee (first_name, last_name, role_title, manager_id) VALUES (res.firstName, res.lastName, res.roleId, res.managerId)", function(err, result, fields){
-    console.table(result);
+    const newEmployee = res
+    db.query("INSERT INTO employee SET ?", newEmployee, function(err, result, fields){
     promptUser()
   })})
 }
-
+//employee update function
 const updateEmployeeRole = () => {
   db.query("SELECT * FROM employee", function(err, result, fields){
     console.table(result);
@@ -141,7 +146,7 @@ const updateEmployeeRole = () => {
     {
       type: 'input',
       name: 'employeeQuery',
-      message: 'Which employee would you like to update?',
+      message: 'What is the ID of the employee you would like to update?',
     },
     {
       type: 'input',
@@ -149,27 +154,14 @@ const updateEmployeeRole = () => {
       message: 'What is the employees new role?'
     }
   ]).then(res => {
-    db.query("UPDATE role SET ? WHERE ?;",
-    [
-      {
-        title: res.roleQuery
-      },
-      {
-        id: res.employeeQuery
-      }
-    ]);
-    // promptUser();
+    const updateRole = res.roleQuery;
+    const updateEmployee = res.employeeQuery;
+    db.query("UPDATE employee SET role_id = ? WHERE id = ?;", 
+    [updateRole, updateEmployee]
+    );
+    promptUser();
   })
 }
-
-// const updateEmployeeRole = () => {
-//   viewEmployee()
-//   .then(([values]) => {
-//     let employeeData = values;
-//     const employeeChoices = employeeData.map(({id, first_name, last_name}) => ({
-//       name:`${first_name} ${last_name}`,
-//       value: id
-//     }));
 
 // BONUS update employee managers
 
@@ -181,5 +173,5 @@ const updateEmployeeRole = () => {
 
 // BONUS view the total utilized budget of a department—in other words, the combined salaries of all employees in that department (COUNT   GROUP BY)
 
-//start questions
+//start first round of questions
 promptUser()

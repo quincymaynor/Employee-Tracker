@@ -1,18 +1,18 @@
 INSERT INTO department (dept_name)
-VALUES (""),
-       (""),
-       ("");
+VALUES ("Admin"),
+       ("Front End"),
+       ("Back End");
        
 INSERT INTO role (title, salary, department_id)
-VALUES ("Senior Developer", 45000,1),
-("Junior Developer", 45000,2),
-("Newbie", 45000,3),
-("Team Lead", 45000,1),
-("Department Head", 45000,2);
+VALUES ("Junior Developer", 60000,2),
+("Junior Developer", 60000,3),
+("Senior Developer", 100000,2),
+("Senior Developer", 100000,3),
+("Team Lead", 120000,2);
 
 INSERT INTO employee ( first_name , last_name , role_id, manager_id)
 VALUES ("John", "Doe", 5, NULL),
-("Jack", "Doe", 4, NULL),
-("Johann", "Doe", 3, 2),
-("Johnathan", "Doe", 2, 2),
-("Jean", "Doe", 1, 2);
+("Jack", "Doe", 4, 1),
+("Johann", "Doe", 3, 1),
+("Johnathan", "Doe", 2, 1),
+("Jean", "Doe", 1, 1);
