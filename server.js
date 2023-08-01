@@ -19,7 +19,7 @@ const promptUser = () => {
       type: 'list',
       name: 'action',
       message: 'What would you like to do?',
-      choices:['View all departments', 'Add a department', 'Delete a department', 'View all roles', 'Add a role', 'delete a role', 'View all employees', 'View all employees by manager', 'View all employees by role', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee', 'Delete an employee']
+      choices:['View all departments', 'Add a department', 'Delete a department', 'View all roles', 'Add a role', 'Delete a role', 'View all employees', 'View all employees by manager', 'View all employees by role', 'Add an employee', 'Update the role of an employee', 'Update the manager of an employee', 'Delete an employee']
     }
   ]).then(res => {
   switch (res.action){
